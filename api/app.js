@@ -31,18 +31,28 @@ const postEtna = (request, h) => {
     return request.payload
 };
 
+
 server.route({
     method: 'GET',
-    path: '/etna/{etnaMessage?}',
-/*    config: {
-        auth: false
-    },*/
+    path: '/user/{id?}',
     handler: getEtna
 });
 
 server.route({
-    method: ['PUT', 'POST'],
-    path: '/etna',
+    method: ['POST'],
+    path: '/login',
+    config: {
+        payload: {
+            parse: true
+        }
+        auth: false
+    },
+    handler: postEtna
+});
+
+server.route({
+    method: ['POST'],
+    path: '/user/{id}/enable',
     config: {
         payload: {
             parse: true
@@ -51,6 +61,55 @@ server.route({
     handler: postEtna
 });
 
+
+server.route({
+    method: 'GET',
+    path: '/crime/{id?}',
+    handler: getEtna
+});
+
+server.route({
+    method: ['POST'],
+    path: '/crime',
+    config: {
+        payload: {
+            parse: true
+        }
+    },
+    handler: postEtna
+});
+
+/* MICROSERVICES */
+
+server.route({
+    method: 'GET',
+    path: '/user/export',
+    handler: getEtna
+});
+
+server.route({
+    method: ['POST'],
+    path: '/user',
+    config: {
+        payload: {
+            parse: true
+        }
+        auth: false
+    },
+    handler: postEtna
+});
+
+
+server.route({
+    method: ['POST'],
+    path: '/crime/search',
+    config: {
+        payload: {
+            parse: true
+        }
+    },
+    handler: postEtna
+});
 
 
 async function start() {
