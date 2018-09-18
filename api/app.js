@@ -1,6 +1,7 @@
 'use strict';
 const Hapi = require('hapi');
 const Config = require('config');
+const AuthBearer = require('hapi-auth-bearer-token');
 
 const options = {
     ops: {
@@ -33,6 +34,9 @@ const postEtna = (request, h) => {
 server.route({
     method: 'GET',
     path: '/etna/{etnaMessage?}',
+/*    config: {
+        auth: false
+    },*/
     handler: getEtna
 });
 
@@ -55,6 +59,20 @@ async function start() {
             plugin: require('good'),
             options,
         });
+        await server.register(AuthBearer);
+
+        server.auth.strategy('simple', 'bearer-access-token', {
+            allowQueryToken: true,
+            validate: async (request, token, h) => {
+                const isValid = token === '1234';
+
+                const credentials = { token };
+                const artifacts = { test: 'info' };
+
+                return { isValid, credentials, artifacts };
+            }
+        });
+        server.auth.default('simple');
 
         await server.start();
     }
