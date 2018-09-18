@@ -1,0 +1,10 @@
+---
+mongodb:
+  image: mongo:3.6.7-jessie
+  ports:
+    - "27017:27017"
+
+mongo-seed:
+  build: ./mongo-seed
+  links:
+    - mongodb
