@@ -19,3 +19,5 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "super duper password"
       MYSQL_DATABASE: "hapivue"
+    volumes:
+      - ./databases/maria/users.sql:/docker-entrypoint-initdb.d/01-users.sql
