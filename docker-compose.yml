@@ -5,6 +5,6 @@ mongodb:
     - "27017:27017"
 
 mongo-seed:
-  build: ./mongo-seed
+  build: databases/mongo-seed
   links:
     - mongodb
