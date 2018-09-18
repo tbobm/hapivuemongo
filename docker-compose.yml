@@ -18,3 +18,4 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: "super duper password"
+      MYSQL_DATABASE: "hapivue"
