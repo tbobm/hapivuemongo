@@ -65,18 +65,26 @@ server.route({
 
 
 const getCrime = async (request, h) => {
-    console.log(request.params.id);
     if (request.params.id != null){
-        return getEtna(request, h);
-    } else {
         return getCrimeDetails(request, h);
+    } else {
+        return getCrimeList(request, h);
     }
 };
 
 const getCrimeDetails = async (request, h) => {
     const db = request.mongo.db;
-    const ObjectID = request.params.id;
+    try {
+        const result = await db.collection(Config.get('mongoConfig.collectionName')).findOne({  compnos: parseInt(request.params.id) });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+    
+};
 
+const getCrimeList = async (request, h) => {
+    const db = request.mongo.db;
     try {
         const result = await db.collection(Config.get('mongoConfig.collectionName')).find({}).toArray();
         return result;
