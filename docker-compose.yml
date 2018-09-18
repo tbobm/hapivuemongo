@@ -1,10 +1,13 @@
 ---
-mongodb:
-  image: mongo:3.6.7-jessie
-  ports:
-    - "27017:27017"
+version: '3.1'
 
-mongo-seed:
-  build: databases/mongo-seed
-  links:
-    - mongodb
+services:
+  mongodb:
+    image: mongo:3.6.7-jessie
+    ports:
+      - "27017:27017"
+
+  mongo-seed:
+    build: databases/mongo-seed
+    links:
+      - mongodb
