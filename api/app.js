@@ -2,6 +2,15 @@
 const Hapi = require('hapi');
 const Config = require('config');
 const AuthBearer = require('hapi-auth-bearer-token');
+const mongo = require('mongodb');
+
+const dbOpts = {
+    url: "mongodb://"+Config.get("mongoConfig.host")+":"+Config.get("mongoConfig.port")+"/"+Config.get("mongoConfig.dbName"),
+    settings: {
+        poolSize: 10
+    },
+    decorate: true
+};
 
 const options = {
     ops: {
@@ -31,20 +40,13 @@ const postEtna = (request, h) => {
     return request.payload
 };
 
-
-server.route({
-    method: 'GET',
-    path: '/user/{id?}',
-    handler: getEtna
-});
-
 server.route({
     method: ['POST'],
     path: '/login',
     config: {
         payload: {
             parse: true
-        }
+        },
         auth: false
     },
     handler: postEtna
@@ -62,10 +64,33 @@ server.route({
 });
 
 
+const getCrime = async (request, h) => {
+    console.log(request.params.id);
+    if (request.params.id != null){
+        return getEtna(request, h);
+    } else {
+        return getCrimeDetails(request, h);
+    }
+};
+
+const getCrimeDetails = async (request, h) => {
+    const db = request.mongo.db;
+    const ObjectID = request.params.id;
+
+    try {
+        const result = await db.collection(Config.get('mongoConfig.collectionName')).find({}).toArray();
+        return result;
+    }
+    catch (err) {
+        throw err;
+    }
+    
+};
+
 server.route({
     method: 'GET',
     path: '/crime/{id?}',
-    handler: getEtna
+    handler: getCrime
 });
 
 server.route({
@@ -93,7 +118,7 @@ server.route({
     config: {
         payload: {
             parse: true
-        }
+        },
         auth: false
     },
     handler: postEtna
@@ -119,6 +144,11 @@ async function start() {
             options,
         });
         await server.register(AuthBearer);
+
+        await server.register({
+            plugin: require('hapi-mongodb'),
+            options: dbOpts
+        });
 
         server.auth.strategy('simple', 'bearer-access-token', {
             allowQueryToken: true,
