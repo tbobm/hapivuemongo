@@ -2,7 +2,7 @@
 const Hapi = require('hapi');
 const Config = require('config');
 const AuthBearer = require('hapi-auth-bearer-token');
-const mongo = require('mongodb');
+const Boom = require('boom');
 
 const dbOpts = {
     url: "mongodb://"+Config.get("mongoConfig.host")+":"+Config.get("mongoConfig.port")+"/"+Config.get("mongoConfig.dbName"),
@@ -52,17 +52,6 @@ server.route({
     handler: postEtna
 });
 
-server.route({
-    method: ['POST'],
-    path: '/user/{id}/enable',
-    config: {
-        payload: {
-            parse: true
-        }
-    },
-    handler: postEtna
-});
-
 
 const getCrime = async (request, h) => {
     if (request.params.id != null){
@@ -76,6 +65,9 @@ const getCrimeDetails = async (request, h) => {
     const db = request.mongo.db;
     try {
         const result = await db.collection(Config.get('mongoConfig.collectionName')).findOne({  compnos: parseInt(request.params.id) });
+        if (!result){
+            return Boom.notFound();
+        }
         return result;
     } catch (err) {
         throw err;
@@ -158,7 +150,7 @@ async function start() {
             options: dbOpts
         });
 
-        server.auth.strategy('simple', 'bearer-access-token', {
+        server.auth.strategy('singleuser', 'bearer-access-token', {
             allowQueryToken: true,
             validate: async (request, token, h) => {
                 const isValid = token === '1234';
@@ -169,7 +161,31 @@ async function start() {
                 return { isValid, credentials, artifacts };
             }
         });
-        server.auth.default('simple');
+
+        server.auth.strategy('admin', 'bearer-access-token', {
+            allowQueryToken: true,
+            validate: async (request, token, h) => {
+                const isValid = token === '4321';
+
+                const credentials = { token };
+                const artifacts = { test: 'info' };
+
+                return { isValid, credentials, artifacts };
+            }
+        });
+        server.auth.default('singleuser');
+
+        server.route({
+            method: ['POST'],
+            path: '/user/{id}/enable',
+            config: {
+                payload: {
+                    parse: true
+                },
+                auth: 'admin'
+            },
+            handler: postEtna
+        });
 
         await server.start();
     }
