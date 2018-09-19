@@ -5,7 +5,7 @@ import Router from 'vue-router'
 const DefaultContainer = () => import('@/containers/DefaultContainer')
 
 // Views
-const Dashboard = () => import('@/views/Dashboard')
+const Crimes = () => import('@/views/Crimes')
 
 const Colors = () => import('@/views/theme/Colors')
 const Typography = () => import('@/views/theme/Typography')
@@ -17,7 +17,6 @@ const Widgets = () => import('@/views/Widgets')
 const Cards = () => import('@/views/base/Cards')
 const Forms = () => import('@/views/base/Forms')
 const Switches = () => import('@/views/base/Switches')
-const Tables = () => import('@/views/base/Tables')
 const Tabs = () => import('@/views/base/Tabs')
 const Breadcrumbs = () => import('@/views/base/Breadcrumbs')
 const Carousels = () => import('@/views/base/Carousels')
@@ -67,14 +66,14 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/dashboard',
+      redirect: '/crimes',
       name: 'Home',
       component: DefaultContainer,
       children: [
         {
-          path: 'dashboard',
-          name: 'Dashboard',
-          component: Dashboard
+          path: 'crimes',
+          name: 'Crimes',
+          component: Crimes
         },
         {
           path: 'users',
@@ -117,11 +116,6 @@ export default new Router({
               path: 'switches',
               name: 'Switches',
               component: Switches
-            },
-            {
-              path: 'tables',
-              name: 'Tables',
-              component: Tables
             },
             {
               path: 'tabs',

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import cTable from './Table.vue'
+import cTable from '../Table.vue'
 
 export default {
   name: 'tables',
