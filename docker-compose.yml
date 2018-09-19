@@ -21,3 +21,4 @@ services:
       MYSQL_DATABASE: "hapivue"
     volumes:
       - ./databases/maria/users.sql:/docker-entrypoint-initdb.d/01-users.sql
+      - ./databases/maria/my.cnf:/etc/mysql/conf.d/custom.cnf
