@@ -17,6 +17,13 @@ services:
     ports:
       - "8080:8080"
 
+  api:
+    build: api
+    links:
+      - mongodb
+    ports:
+      - "8000:8000"
+
   maria:
     image: mariadb:10.3.9
     ports:
