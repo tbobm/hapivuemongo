@@ -3,7 +3,7 @@ USE hapivue;
 
 CREATE TABLE IF NOT EXISTS grades (
     id INT NOT NULL auto_increment,
-    name ENUM('agent', 'detective', 'chef de la police'),
+    name ENUM('Agent', 'Détective', 'Chef de la police'),
     CONSTRAINT grades_pk
     PRIMARY KEY(id)
 );
