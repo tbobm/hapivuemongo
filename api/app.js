@@ -78,7 +78,7 @@ const getCrimeDetails = async (request, h) => {
 const getCrimeList = async (request, h) => {
     const db = request.mongo.db;
     try {
-        const result = await db.collection(Config.get('mongoConfig.collectionName')).find({}).toArray();
+        const result = await db.collection(Config.get('mongoConfig.collectionName')).find({}).limit(10).toArray();
         return result;
     }
     catch (err) {
