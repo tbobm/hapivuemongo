@@ -1,5 +1,5 @@
 <template>
   <div>
-    Index : boston
+    Users : index {{ params.id }}
   </div>
 </template>

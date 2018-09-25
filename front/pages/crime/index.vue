@@ -1,5 +1,5 @@
 <template>
   <div>
-    Index : boston
+    Crime : index
   </div>
 </template>
