@@ -20,6 +20,7 @@
   import axios from 'axios';
 
   export default {
+    middleware: 'authenticated',
     validate({params}) {
       return /^\d+$/.test(params.id)
     },

@@ -5,6 +5,16 @@
       <nuxt-link :to="{ name: 'crime'}" class="p-2 text-dark">Crimes</nuxt-link>
       <nuxt-link :to="{ name: 'user'}" class="p-2 text-dark">Users</nuxt-link>
     </nav>
-    <a class="btn btn-outline-primary" href="#">Logout</a>
+    <a class="btn btn-outline-primary" v-on:click="logout">Logout</a>
   </div>
 </template>
+<script>
+  export default {
+    methods: {
+      logout() {
+        this.$store.commit('logout');
+        this.$router.push('/')
+      }
+    }
+  }
+</script>
