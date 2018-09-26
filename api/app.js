@@ -50,6 +50,20 @@ const loginHandler = (request, h) => {
     loginAuth.password = undefined;
     loginAuth.accessToken = "Totototo";
     loginAuth.role = "Admin";
+    loginAuth.perms = {
+        'crime':{
+            'create': true,
+            'edit': true,
+            'view': true,
+            'delete': true
+        },
+        'users':{
+            'create': true,
+            'edit': true,
+            'view': true,
+            'delete': true
+        }
+    };
     server.log('info', loginAuth);
     return loginAuth;
 };
