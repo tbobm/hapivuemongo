@@ -1,5 +1,7 @@
 <template>
-  <div>
-    Index : boston
-  </div>
+  <section class="container-fluid">
+    <div class="row">
+      Index : boston
+    </div>
+  </section>
 </template>

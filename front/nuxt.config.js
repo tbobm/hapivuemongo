@@ -20,6 +20,9 @@ module.exports = {
   /*
   ** Build configuration
   */
+  modules: [
+    'bootstrap-vue/nuxt',
+  ],
   build: {
     /*
     ** Run ESLint on save

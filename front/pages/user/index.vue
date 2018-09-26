@@ -1,5 +1,5 @@
 <template>
   <div>
-    Users : index {{ params.id }}
+    Users : index
   </div>
 </template>

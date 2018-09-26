@@ -5,7 +5,7 @@ const AuthBearer = require('hapi-auth-bearer-token');
 const Boom = require('boom');
 
 const dbOpts = {
-    url: "mongodb://"+Config.get("mongoConfig.host")+":"+Config.get("mongoConfig.port")+"/"+Config.get("mongoConfig.dbName"),
+    url: "mongodb://" + Config.get("mongoConfig.host") + ":" + Config.get("mongoConfig.port") + "/" + Config.get("mongoConfig.dbName"),
     settings: {
         poolSize: 10
     },
@@ -20,7 +20,7 @@ const options = {
         myConsoleReporter: [{
             module: 'good-squeeze',
             name: 'Squeeze',
-            args: [{ log: '*', response: '*' }]
+            args: [{log: '*', response: '*'}]
         }, {
             module: 'good-console'
         }, 'stdout']
@@ -30,6 +30,11 @@ const options = {
 const server = Hapi.server({
     host: Config.get('api.host'),
     port: Config.get('api.port'),
+    routes: {
+        cors: {
+            origin: ['*']
+        }
+    }
 });
 
 const getEtna = (request, h) => {
@@ -54,7 +59,7 @@ server.route({
 
 
 const getCrime = async (request, h) => {
-    if (request.params.id != null){
+    if (request.params.id != null) {
         return getCrimeDetails(request, h);
     } else {
         return getCrimeList(request, h);
@@ -64,15 +69,15 @@ const getCrime = async (request, h) => {
 const getCrimeDetails = async (request, h) => {
     const db = request.mongo.db;
     try {
-        const result = await db.collection(Config.get('mongoConfig.collectionName')).findOne({  compnos: parseInt(request.params.id) });
-        if (!result){
+        const result = await db.collection(Config.get('mongoConfig.collectionName')).findOne({compnos: parseInt(request.params.id)});
+        if (!result) {
             return Boom.notFound();
         }
         return result;
     } catch (err) {
         throw err;
     }
-    
+
 };
 
 const getCrimeList = async (request, h) => {
@@ -84,7 +89,7 @@ const getCrimeList = async (request, h) => {
     catch (err) {
         throw err;
     }
-    
+
 };
 
 server.route({
@@ -155,10 +160,10 @@ async function start() {
             validate: async (request, token, h) => {
                 const isValid = token === '1234';
 
-                const credentials = { token };
-                const artifacts = { test: 'info' };
+                const credentials = {token};
+                const artifacts = {test: 'info'};
 
-                return { isValid, credentials, artifacts };
+                return {isValid, credentials, artifacts};
             }
         });
 
@@ -167,10 +172,10 @@ async function start() {
             validate: async (request, token, h) => {
                 const isValid = token === '4321';
 
-                const credentials = { token };
-                const artifacts = { test: 'info' };
+                const credentials = {token};
+                const artifacts = {test: 'info'};
 
-                return { isValid, credentials, artifacts };
+                return {isValid, credentials, artifacts};
             }
         });
         server.auth.default('singleuser');
@@ -192,8 +197,9 @@ async function start() {
     catch (err) {
         console.log(err);
         process.exit(1);
-    };
-    await server.log('info', 'server running at: '+ server.info.uri);
+    }
+    ;
+    await server.log('info', 'server running at: ' + server.info.uri);
 };
 
 start();
