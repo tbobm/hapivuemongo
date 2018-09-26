@@ -22,6 +22,7 @@
 </template>
 <script>
   import Cookie from 'js-cookie'
+  import axios from 'axios';
 
   export default {
     middleware: 'notAuthenticated',
@@ -36,14 +37,15 @@
     },
     methods: {
       postLogin() {
-        setTimeout(() => {
-          const auth = {
-            accessToken: 'someStringGotFromApiServiceWithAjax'
-          }
-          this.$store.commit('update', auth);
-          Cookie.set('auth', auth) // saving token in cookie for server rendering
-          this.$router.push('/')
-        }, 1000)
+        axios.post(`http://localhost:8000/login`, this.form)
+          .then((res) => {
+            if (!res.data || !res.data.accessToken){
+              this.loginFailed = true;
+              return;
+            }
+            this.$store.commit('update', res.data);
+            this.$router.push('/')
+          })
       }
     }
   }

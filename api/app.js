@@ -45,6 +45,15 @@ const postEtna = (request, h) => {
     return request.payload
 };
 
+const loginHandler = (request, h) => {
+    let loginAuth = request.payload;
+    loginAuth.password = undefined;
+    loginAuth.accessToken = "Totototo";
+    loginAuth.role = "Admin";
+    server.log('info', loginAuth);
+    return loginAuth;
+};
+
 server.route({
     method: ['POST'],
     path: '/login',
@@ -54,7 +63,7 @@ server.route({
         },
         auth: false
     },
-    handler: postEtna
+    handler: loginHandler
 });
 
 

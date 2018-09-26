@@ -1,4 +1,5 @@
 import Vuex from 'vuex'
+import Cookie from 'js-cookie'
 
 var cookieparser = require('cookieparser')
 
@@ -10,9 +11,11 @@ const createStore = () => {
     mutations: {
       update (state, data) {
         state.auth = data;
+        Cookie.set('auth', state.auth);
       },
       logout(state){
         state.auth = null;
+        Cookie.set('auth', state.auth);
       }
     },
     actions: {
