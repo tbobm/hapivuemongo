@@ -27,4 +27,4 @@ services:
     ports:
       - "5000:5000"
     environment:
-      SQL_URI: "mysql://root:super duper password@maria/hapivue"
+      SQL_URI: "mysql+pymysql://root:super duper password@maria/hapivue"
