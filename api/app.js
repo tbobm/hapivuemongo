@@ -126,16 +126,24 @@ server.route({
     handler: getEtna
 });
 
+const registerTempHandler = (request, h) => {
+    let loginAuth = request.payload;
+    loginAuth.password = undefined;
+    loginAuth.success = true;
+    server.log('info', loginAuth);
+    return loginAuth;
+};
+
 server.route({
     method: ['POST'],
-    path: '/user',
+    path: '/register',
     config: {
         payload: {
             parse: true
         },
         auth: false
     },
-    handler: postEtna
+    handler: registerTempHandler
 });
 
 
