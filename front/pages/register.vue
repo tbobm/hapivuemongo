@@ -4,10 +4,10 @@
       <div class="col-sm-12">
 
         <b-alert variant="danger" :show="registerStatus === false" dismissible>Sorry, invalid email or password.</b-alert>
-        <b-alert variant="success" :show="registerStatus === true" dismissible>Registration successful !</b-alert>
+        <b-alert variant="success" :show="registerStatus === true" dismissible>Registration successful ! You will be redirected to login page !</b-alert>
         <b-form @submit.prevent="register" novalidate>
-          <b-form-group label="Email address">
-            <b-form-input type="email" name="email" v-model="form.email"></b-form-input>
+          <b-form-group label="User name">
+            <b-form-input type="text" name="username" v-model="form.username"></b-form-input>
           </b-form-group>
           <b-form-group label="Password">
             <b-form-input type="password" name="password" v-model="form.password"></b-form-input>
@@ -29,8 +29,9 @@
     data() {
       return {
         form: {
-          email: '',
-          password: ''
+          username: '',
+          password: '',
+          grade: 1
         },
         registerStatus: null
       }
@@ -39,7 +40,8 @@
       register() {
         axios.post(`http://localhost:8000/register`, this.form)
           .then((res) => {
-            if (!res.data || !res.data.success){
+            console.log(res);
+            if (res.status !== 200) {
               this.registerStatus = false;
               return;
             }

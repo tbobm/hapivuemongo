@@ -17,6 +17,8 @@
     "good-squeeze": "^5.1.0",
     "hapi": "^17.5.4",
     "hapi-auth-bearer-token": "^6.1.0",
-    "hapi-mongodb": "^7.1.0"
+    "hapi-mongodb": "^7.1.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
   }
 }

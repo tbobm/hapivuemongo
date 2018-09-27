@@ -37,6 +37,8 @@ services:
       - ./databases/maria/my.cnf:/etc/mysql/conf.d/custom.cnf
   register:
     build: microservices/register
+    links:
+      - maria
     ports:
       - "5000:5000"
     environment:

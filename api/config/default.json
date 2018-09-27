@@ -1,12 +1,12 @@
 {
-	"api": {
-	  "host": "localhost",
-      "port": 8000
-	},
-    "mongoConfig": {
-      "host": "localhost",
-      "port": 27017,
-      "dbName": "hapivue",
-      "collectionName": "crimes"
-    }
+  "api": {
+    "host": "localhost",
+    "port": 8000
+  },
+  "mongoConfig": {
+    "host": "localhost",
+    "port": 27017,
+    "dbName": "hapivue",
+    "collectionName": "crimes"
+  }
 }
