@@ -45,6 +45,8 @@ def register_user():
         username=username,
         password=password,
     )
+    db.session.add(new_user)
+    db.session.commit()
     return jsonify({'username': username, 'password': password, 'grade': grade_name.name})
 
 
