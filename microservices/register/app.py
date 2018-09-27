@@ -5,6 +5,7 @@ import os
 
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from pymysql.err import IntegrityError
 
 
 app = Flask(__name__)
@@ -46,7 +47,10 @@ def register_user():
         password=password,
     )
     db.session.add(new_user)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError:
+        return jsonify({'error': True})
     return jsonify({'username': username, 'password': password, 'grade': grade_name.name})
 
 
