@@ -1,14 +1,16 @@
 USE hapivue;
 
 
-CREATE TABLE IF NOT EXISTS grades (
+DROP TABLE IF EXISTS grades;
+CREATE TABLE grades (
     id INT NOT NULL auto_increment,
     name ENUM('Agent', 'Détective', 'Chef de la police'),
     CONSTRAINT grades_pk
     PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS users (
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
     id INT NOT NULL auto_increment,
     grade_id INT NOT NULL,
     active BOOLEAN NOT NULL,
