@@ -4,8 +4,8 @@ Tiny microservice registering users based on flask.
 import os
 
 from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
 from pymysql.err import IntegrityError
+from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
@@ -50,7 +50,8 @@ def register_user():
     try:
         db.session.commit()
     except IntegrityError:
-        return jsonify({'error': True})
+        db.session.rollback()
+        return jsonify({'error': True}), 409
     return jsonify({'username': username, 'password': password, 'grade': grade_name.name})
 
 
