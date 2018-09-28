@@ -54,6 +54,7 @@ def register_user():
         return jsonify({'error': True}), 409
     return jsonify(
         {
+            'error': False,
             'username': username,
             'grade': grade_name.name,
         }
