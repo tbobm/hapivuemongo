@@ -52,7 +52,12 @@ def register_user():
     except IntegrityError:
         db.session.rollback()
         return jsonify({'error': True}), 409
-    return jsonify({'username': username, 'password': password, 'grade': grade_name.name})
+    return jsonify(
+        {
+            'username': username,
+            'grade': grade_name.name,
+        }
+    )
 
 
 if __name__ == '__main__':
