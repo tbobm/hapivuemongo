@@ -46,27 +46,64 @@ const postEtna = (request, h) => {
   return request.payload
 };
 
-const loginHandler = (request, h) => {
-  let loginAuth = request.payload;
-  loginAuth.password = undefined;
-  loginAuth.accessToken = "Totototo";
-  loginAuth.role = "Admin";
-  loginAuth.perms = {
-    'crime': {
-      'create': true,
-      'edit': true,
-      'view': true,
-      'delete': true
-    },
-    'users': {
-      'create': true,
-      'edit': true,
-      'view': true,
-      'delete': true
-    }
+// n9vPhf8yE8xsutbljU8jhArZfRSvPkq9JC8H4Egoa0emaTRoZeEHzaNrPFoVfYsiH-ISWjKy9DPD5u_WcbmcJQ
+
+const checkToken = async (r, h) => {
+  const options = {
+    uri: 'http://localhost:5002/token',
+    json: true,
+    resolveWithFullResponse: true,
+    method: 'POST',
+    body: r.payload,
   };
-  server.log('info', loginAuth);
-  return loginAuth;
+  server.log('info', r.p);
+
+  return request(options).then((response) => {
+    server.log('debug', response);
+    return response.body;
+  }).catch((err) => {
+    if (err.statusCode === 404){
+      return {error: "Token not found"};
+    }
+    server.log('error', err);
+    server.log('error', 'errorstatuscode:' + err.statusCode)
+  })
+
+};
+
+server.route({
+  method: ['POST'],
+  path: '/token',
+  config: {
+    payload: {
+      parse: true
+    },
+    auth: false
+  },
+  handler: checkToken
+});
+
+const loginHandler = async (r, h) => {
+  const options = {
+    uri: 'http://localhost:5001/connectUser',
+    json: true,
+    resolveWithFullResponse: true,
+    method: 'POST',
+    body: r.payload,
+  };
+  server.log('info', r.p);
+
+  return request(options).then((response) => {
+    server.log('debug', response);
+    return response.body;
+  }).catch((err) => {
+    if (err.statusCode === 404){
+      return {error: "User not found or incorrect password"};
+    }
+    server.log('error', err);
+    server.log('error', 'errorstatuscode:' + err.statusCode)
+  })
+
 };
 
 server.route({

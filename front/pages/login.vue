@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12">
 
-        <b-alert variant="danger" :show="loginFailed" dismissible>Sorry, invalid email or password.</b-alert>
+        <b-alert variant="danger" :show="loginFailed" dismissible>{{ this.errorMessage }}</b-alert>
         <b-form @submit.prevent="postLogin" novalidate>
           <b-form-group label="Username">
             <b-form-input type="text" name="username" v-model="form.username"></b-form-input>
@@ -13,9 +13,6 @@
           </b-form-group>
           <b-button variant="primary" size="lg" type="submit">Login</b-button>
         </b-form>
-        <p>
-          Use the email <strong>demo@gmail.com</strong> and password <strong>demo</strong> to login.
-        </p>
       </div>
     </div>
   </section>
@@ -32,15 +29,17 @@
           username: '',
           password: ''
         },
-        loginFailed: false
+        loginFailed: false,
+        errorMessage: null
       }
     },
     methods: {
       postLogin() {
         axios.post(`http://localhost:8000/login`, this.form)
           .then((res) => {
-            if (!res.data || !res.data.accessToken){
+            if (!res.data || res.data.error){
               this.loginFailed = true;
+              this.errorMessage = res.data.error;
               return;
             }
             this.$store.commit('update', res.data);
