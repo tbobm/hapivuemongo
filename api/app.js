@@ -145,7 +145,8 @@ const getCrimeDetails = async (request, h) => {
 const getCrimeList = async (request, h) => {
   const db = request.mongo.db;
   try {
-    const result = await db.collection(Config.get('mongoConfig.collectionName')).find({}).limit(10).toArray();
+    const result = await db.collection(Config.get('mongoConfig.collectionName')).find({})
+      .sort({$natural: -1}).limit(10).toArray();
     return result;
   }
   catch (err) {
@@ -164,7 +165,6 @@ server.route({
 const updateCrime = async (request, h) => {
   const db = request.mongo.db;
   try {
-    // request.payload['_id'] = new request.mongo.ObjectID(request.params.id);
     const result = await db.collection(Config.get('mongoConfig.collectionName')).save(request.payload);
     server.log('debug', result);
     if (!result) {
@@ -212,7 +212,7 @@ server.route({
       parse: true
     }
   },
-  handler: postEtna
+  handler: updateCrime
 });
 
 /* MICROSERVICES */
