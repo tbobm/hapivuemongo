@@ -130,7 +130,8 @@ const getCrime = async (request, h) => {
 const getCrimeDetails = async (request, h) => {
   const db = request.mongo.db;
   try {
-    const result = await db.collection(Config.get('mongoConfig.collectionName')).findOne({compnos: parseInt(request.params.id)});
+    server.log('info', request.params);
+    const result = await db.collection(Config.get('mongoConfig.collectionName')).findOne({_id: new request.mongo.ObjectID(request.params.id)});
     if (!result) {
       return Boom.notFound();
     }
@@ -157,6 +158,50 @@ server.route({
   method: 'GET',
   path: '/crime/{id?}',
   handler: getCrime
+});
+
+
+const updateCrime = async (request, h) => {
+  const db = request.mongo.db;
+  try {
+    // request.payload['_id'] = new request.mongo.ObjectID(request.params.id);
+    const result = await db.collection(Config.get('mongoConfig.collectionName')).save(request.payload);
+    server.log('debug', result);
+    if (!result) {
+      return Boom.notFound();
+    }
+    return result;
+  } catch (err) {
+    throw err;
+  }
+
+};
+
+server.route({
+  method: 'POST',
+  path: '/crime/{id}',
+  handler: updateCrime
+});
+
+const deleteCrime = async (request, h) => {
+  const db = request.mongo.db;
+  try {
+    const result = await db.collection(Config.get('mongoConfig.collectionName')).remove({_id: new request.mongo.ObjectID(request.params.id)}, {justOne: true});
+    server.log('debug', result);
+    if (!result) {
+      return Boom.notFound();
+    }
+    return result;
+  } catch (err) {
+    throw err;
+  }
+
+};
+
+server.route({
+  method: 'DELETE',
+  path: '/crime/{id}',
+  handler: deleteCrime
 });
 
 server.route({

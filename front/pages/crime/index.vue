@@ -6,15 +6,17 @@
         <th>Case number</th>
         <th>Crime code</th>
         <th>Date</th>
+        <td v-if="$store.state.auth && $store.state.auth.permissions.delete">Delete this crime</td>
       </tr>
       </thead>
       <tbody>
       <tr v-for="(item, index) in details" :key="index">
         <td>
-          <nuxt-link :to="{ name: 'crime-id', params: { id: item.compnos }}">{{ item.compnos }}</nuxt-link>
+          <nuxt-link :to="{ name: 'crime-id', params: { id: item._id }}">{{ item.compnos }}</nuxt-link>
         </td>
         <td>{{ item.main_crimecode }}</td>
         <td>{{ item.fromdate }}</td>
+        <td v-if="$store.state.auth && $store.state.auth.permissions.delete" style="cursor: pointer" v-on:click="deleteCrime(item)">Delete this</td>
       </tr>
       </tbody>
     </table>
@@ -30,6 +32,14 @@
         .then((res) => {
           return {details: res.data}
         })
+    },
+    methods: {
+      deleteCrime(item, event) {
+        axios.delete(`http://localhost:8000/crime/${item._id}?access_token=1234`)
+          .then((res) => {
+            console.log(res.data);
+          })
+      }
     }
   }
 </script>

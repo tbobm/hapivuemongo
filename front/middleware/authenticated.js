@@ -13,5 +13,6 @@ export default function ({ store, redirect }) {
         store.commit('update', null);
         return redirect('/login')
       }
+      store.commit('update', res.data);
     })
 }
