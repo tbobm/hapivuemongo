@@ -1,4 +1,11 @@
-FROM mongo:3.6.7-jessie
+FROM python:3.7
 
-COPY data.csv /tmp/data.csv
-CMD mongoimport --host mongodb --db hapivue --collection crimes --drop --type csv --headerline --file /tmp/data.csv
+COPY requirements.txt ./
+
+
+RUN pip install --no-cache-dir -r requirements.txt
+WORKDIR /usr/src/app
+
+COPY . .
+
+CMD ["python", "./app.py"]
