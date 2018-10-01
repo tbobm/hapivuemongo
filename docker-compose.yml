@@ -34,3 +34,9 @@ services:
       - "5001:5001"
     environment:
       SQL_URI: "mysql+pymysql://root:super duper password@maria/hapivue"
+  token:
+    build: microservices/token
+    ports:
+      - "5002:5002"
+    environment:
+      SQL_URI: "mysql+pymysql://root:super duper password@maria/hapivue"
