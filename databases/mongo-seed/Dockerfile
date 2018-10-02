@@ -8,4 +8,4 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-CMD ["python", "./app.py"]
+CMD ["python", "./csv_importer.py"]
