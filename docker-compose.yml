@@ -1,6 +1,5 @@
 ---
 version: '3.1'
-
 services:
   mongodb:
     image: mongo:3.6.7-jessie
@@ -21,7 +20,8 @@ services:
       MYSQL_ROOT_PASSWORD: "super duper password"
       MYSQL_DATABASE: "hapivue"
     volumes:
-      - ./databases/maria/users.sql:/docker-entrypoint-initdb.d/01-users.sql
+      - ./databases/maria/db_users.sql:/docker-entrypoint-initdb.d/01-users.sql
+      - ./databases/maria/users.sql:/docker-entrypoint-initdb.d/02-tables.sql
       - ./databases/maria/my.cnf:/etc/mysql/conf.d/custom.cnf
   register:
     build: microservices/register
@@ -40,4 +40,10 @@ services:
     ports:
       - "5002:5002"
     environment:
-      SQL_URI: "mysql+pymysql://root:super duper password@maria/hapivue"
+
+      SQL_URI: "\
+        mysql+pymysql://\
+        ms_reader:\
+        Zevflhy0PRB6ZbD8P0ubeBzH81lXRY7D5IrnQH96pjr7jjeJKD5W9LrvV9P0\
+        @maria/hapivue\
+        "
