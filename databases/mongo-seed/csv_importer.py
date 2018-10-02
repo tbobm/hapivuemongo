@@ -8,9 +8,12 @@ from ast import literal_eval
 import csv
 
 import arrow
+from pymongo import MongoClient, InsertOne
 
 
 FILE = os.environ.get('CSV_FILE', 'data.csv')
+DATABASE = MongoClient(os.environ.get('MONGO_URI', 'mongodb://localhost:27017/hapivue')).get_database()
+COLLECTION = 'crimes'
 
 
 def ignore(f):
@@ -21,9 +24,8 @@ def get_datetime(value):
     return arrow.get(value).datetime
 
 
-def main():
-
-    fieldsnames = {
+def format_row(row):
+    formatter = {
         'compnos': literal_eval,
         'naturecode': ignore,
         'incident_type_description': ignore,
@@ -45,6 +47,26 @@ def main():
         'xstreetname': ignore,
         'location': literal_eval,
     }
- 
+    return {k: formatter[k](v) for k, v in row.items()}
+
+
+def get_rows():
     with open(FILE) as f:
-        d = csv.dictreader(f=f)
+        reader = csv.DictReader(f=f)
+        for row in reader:
+            yield format_row(row)
+
+
+def prepare_row(row):
+    return InsertOne(row)
+
+
+def main():
+    print('processing rows')
+    rows = get_rows()
+    res = DATABASE[COLLECTION].bulk_write([prepare_row(row) for row in rows])
+    print(res)
+
+
+if __name__ == '__main__':
+    main()
