@@ -28,13 +28,23 @@ services:
     ports:
       - "5000:5000"
     environment:
-      SQL_URI: "mysql+pymysql://root:super duper password@maria/hapivue"
+      SQL_URI: "\
+        mysql+pymysql://\
+        ms_writer:\
+        Hjpvv1x22ci_-SJWtyZNhrFDkRK0cSNrwczx7fSkME4c2xOTXDmJfwFOpQ5w\
+        @maria/hapivue\
+        "
   connection:
     build: microservices/connection
     ports:
       - "5001:5001"
     environment:
-      SQL_URI: "mysql+pymysql://root:super duper password@maria/hapivue"
+      SQL_URI: "\
+        mysql+pymysql://\
+        ms_writer:\
+        Hjpvv1x22ci_-SJWtyZNhrFDkRK0cSNrwczx7fSkME4c2xOTXDmJfwFOpQ5w\
+        @maria/hapivue\
+        "
   token:
     build: microservices/token
     ports:
