@@ -9,8 +9,9 @@ services:
 
   mongo-seed:
     build: databases/mongo-seed
-    links:
-      - mongodb
+    environment:
+      MONGO_URI: "mongodb://mongodb/hapivue"
+      CSV_FILE: "data.csv"
 
   maria:
     image: mariadb:10.3.9
