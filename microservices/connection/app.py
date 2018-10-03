@@ -50,6 +50,7 @@ def register_user():
     user = Users.query.filter_by(
         username=username,
         password=password,
+        active=True,
     ).first()
     if not user:
         return jsonify({'error': True}), 404
