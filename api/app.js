@@ -62,7 +62,7 @@ const checkToken = async (r, h) => {
     server.log('debug', response);
     return response.body;
   }).catch((err) => {
-    if (err.statusCode === 404){
+    if (err.statusCode === 404) {
       return {error: "Token not found"};
     }
     server.log('error', err);
@@ -97,7 +97,7 @@ const loginHandler = async (r, h) => {
     server.log('debug', response);
     return response.body;
   }).catch((err) => {
-    if (err.statusCode === 404){
+    if (err.statusCode === 404) {
       return {error: "User not found or incorrect password"};
     }
     server.log('error', err);
@@ -282,26 +282,40 @@ async function start() {
     });
 
     server.auth.strategy('singleuser', 'bearer-access-token', {
-      allowQueryToken: true,
       validate: async (request, token, h) => {
-        const isValid = token === '1234';
-
+        let isValid = true;
+        server.log('debug', token)
         const credentials = {token};
-        const artifacts = {test: 'info'};
+        const artifacts = { test: 'info' };
 
-        return {isValid, credentials, artifacts};
+        const options = {
+          uri: 'http://localhost:5002/token',
+          json: true,
+          resolveWithFullResponse: true,
+          method: 'POST',
+          body: {'token': token},
+        };
+        server.log('info', {'token': token});
+
+        return require('request-promise')(options).then((response) => {
+          const toto = {isValid, credentials, artifacts};
+          return toto;
+        }).catch((err) => {
+          server.log('error', err);
+          server.log('error', 'errorstatuscode:' + err.statusCode)
+          isValid = false;
+          return {isValid, credentials, artifacts};
+        })
       }
     });
 
     server.auth.strategy('admin', 'bearer-access-token', {
-      allowQueryToken: true,
       validate: async (request, token, h) => {
         const isValid = token === '4321';
-
+        server.log('debug', token)
         const credentials = {token};
-        const artifacts = {test: 'info'};
 
-        return {isValid, credentials, artifacts};
+        return {isValid, credentials};
       }
     });
     server.auth.default('singleuser');

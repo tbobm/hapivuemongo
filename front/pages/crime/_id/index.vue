@@ -28,8 +28,8 @@
 /*    validate({params}) {
       return /^\d+$/.test(params.id)
     },*/
-    asyncData({params}) {
-      return axios.get(`http://localhost:8000/crime/${params.id}?access_token=1234`)
+    asyncData({store, params}) {
+      return axios.get(`http://localhost:8000/crime/${params.id}`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {
           return {details: res.data}
         })

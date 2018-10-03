@@ -3,6 +3,7 @@
     <table class="table">
       <thead>
       <tr>
+        <th>ID</th>
         <th>Case number</th>
         <th>Crime code</th>
         <th>Date</th>
@@ -12,11 +13,14 @@
       <tbody>
       <tr v-for="(item, index) in details" :key="index">
         <td>
-          <nuxt-link :to="{ name: 'crime-id', params: { id: item._id }}">{{ item.compnos }}</nuxt-link>
+          <nuxt-link :to="{ name: 'crime-id', params: { id: item._id }}">{{ item._id }}</nuxt-link>
         </td>
+        <td>{{ item.compnos }}</td>
         <td>{{ item.main_crimecode }}</td>
         <td>{{ item.fromdate }}</td>
-        <td v-if="$store.state.auth && $store.state.auth.permissions.delete" style="cursor: pointer" v-on:click="deleteCrime(item)">Delete this</td>
+        <td v-if="$store.state.auth && $store.state.auth.permissions.delete" style="cursor: pointer"
+            v-on:click="deleteCrime(item)">Delete this
+        </td>
       </tr>
       </tbody>
     </table>
@@ -27,8 +31,8 @@
 
   export default {
     middleware: 'authenticated',
-    asyncData({params}) {
-      return axios.get(`http://localhost:8000/crime?access_token=1234`)
+    asyncData({store}) {
+      return axios.get(`http://localhost:8000/crime`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {
           return {details: res.data}
         })
