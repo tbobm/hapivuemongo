@@ -56,10 +56,8 @@ const checkToken = async (r, h) => {
     method: 'POST',
     body: r.payload,
   };
-  server.log('info', r.p);
 
   return request(options).then((response) => {
-    server.log('debug', response);
     return response.body;
   }).catch((err) => {
     if (err.statusCode === 404) {
@@ -91,10 +89,8 @@ const loginHandler = async (r, h) => {
     method: 'POST',
     body: r.payload,
   };
-  server.log('info', r.p);
 
   return request(options).then((response) => {
-    server.log('debug', response);
     return response.body;
   }).catch((err) => {
     if (err.statusCode === 404) {
@@ -119,18 +115,19 @@ server.route({
 });
 
 
-const getCrime = async (request, h) => {
-  if (request.params.id != null) {
-    return getCrimeDetails(request, h);
+const getCrime = async (r, h) => {
+  if (!r.auth || !r.auth.credentials || !r.auth.credentials.permissions || !r.auth.credentials.permissions.read)
+    return Boom.forbidden("You don't have enough permissions");
+  if (r.params.id != null) {
+    return getCrimeDetails(r, h);
   } else {
-    return getCrimeList(request, h);
+    return getCrimeList(r, h);
   }
 };
 
 const getCrimeDetails = async (request, h) => {
   const db = request.mongo.db;
   try {
-    server.log('info', request.params);
     const result = await db.collection(Config.get('mongoConfig.collectionName')).findOne({_id: new request.mongo.ObjectID(request.params.id)});
     if (!result) {
       return Boom.notFound();
@@ -142,8 +139,8 @@ const getCrimeDetails = async (request, h) => {
 
 };
 
-const getCrimeList = async (request, h) => {
-  const db = request.mongo.db;
+const getCrimeList = async (r, h) => {
+  const db = r.mongo.db;
   try {
     return await db.collection(Config.get('mongoConfig.collectionName')).find({}).sort({$natural: -1}).limit(10).toArray();
   }
@@ -160,11 +157,12 @@ server.route({
 });
 
 
-const updateCrime = async (request, h) => {
-  const db = request.mongo.db;
+const updateCrime = async (r, h) => {
+  if (!r.auth || !r.auth.credentials || !r.auth.credentials.permissions || !r.auth.credentials.permissions.edit)
+    return Boom.forbidden("You don't have enough permissions");
+  const db = r.mongo.db;
   try {
-    const result = await db.collection(Config.get('mongoConfig.collectionName')).save(request.payload);
-    server.log('debug', result);
+    const result = await db.collection(Config.get('mongoConfig.collectionName')).save(r.payload);
     if (!result) {
       return Boom.notFound();
     }
@@ -181,11 +179,12 @@ server.route({
   handler: updateCrime
 });
 
-const deleteCrime = async (request, h) => {
-  const db = request.mongo.db;
+const deleteCrime = async (r, h) => {
+  if (!r.auth || !r.auth.credentials || !r.auth.credentials.permissions || !r.auth.credentials.permissions.delete)
+    return Boom.forbidden("You don't have enough permissions");
+  const db = r.mongo.db;
   try {
-    const result = await db.collection(Config.get('mongoConfig.collectionName')).remove({_id: new request.mongo.ObjectID(request.params.id)}, {justOne: true});
-    server.log('debug', result);
+    const result = await db.collection(Config.get('mongoConfig.collectionName')).remove({_id: new r.mongo.ObjectID(r.params.id)}, {justOne: true});
     if (!result) {
       return Boom.notFound();
     }
@@ -229,10 +228,8 @@ const registerTempHandler = async (r, h) => {
     method: 'POST',
     body: r.payload,
   };
-  server.log('info', r.p);
 
   return request(options).then((response) => {
-    server.log('debug', response);
     return response.body;
   }).catch((err) => {
     server.log('error', err);
@@ -292,9 +289,8 @@ async function start() {
     server.auth.strategy('singleuser', 'bearer-access-token', {
       validate: async (r, token, h) => {
         let isValid = true;
-        server.log('debug', token)
         let credentials = {token};
-        const artifacts = { test: 'info' };
+        const artifacts = {test: 'info'};
 
         const options = {
           uri: 'http://localhost:5002/token',
@@ -303,7 +299,6 @@ async function start() {
           method: 'POST',
           body: {'token': token},
         };
-        server.log('info', {'token': token});
 
         return request(options).then((response) => {
           credentials = response.body;

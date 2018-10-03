@@ -39,7 +39,7 @@
     },
     methods: {
       deleteCrime(item, event) {
-        axios.delete(`http://localhost:8000/crime/${item._id}?access_token=1234`)
+        axios.delete(`http://localhost:8000/crime/${item._id}`, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
           .then((res) => {
             console.log(res.data);
           })
