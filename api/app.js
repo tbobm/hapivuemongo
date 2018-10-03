@@ -145,9 +145,7 @@ const getCrimeDetails = async (request, h) => {
 const getCrimeList = async (request, h) => {
   const db = request.mongo.db;
   try {
-    const result = await db.collection(Config.get('mongoConfig.collectionName')).find({})
-      .sort({$natural: -1}).limit(10).toArray();
-    return result;
+    return await db.collection(Config.get('mongoConfig.collectionName')).find({}).sort({$natural: -1}).limit(10).toArray();
   }
   catch (err) {
     throw err;
@@ -255,6 +253,16 @@ server.route({
   handler: registerTempHandler
 });
 
+server.route({
+  method: ['POST'],
+  path: '/user/{id}/enable',
+  config: {
+    payload: {
+      parse: true
+    }
+  },
+  handler: postEtna
+});
 
 server.route({
   method: ['POST'],
@@ -282,10 +290,10 @@ async function start() {
     });
 
     server.auth.strategy('singleuser', 'bearer-access-token', {
-      validate: async (request, token, h) => {
+      validate: async (r, token, h) => {
         let isValid = true;
         server.log('debug', token)
-        const credentials = {token};
+        let credentials = {token};
         const artifacts = { test: 'info' };
 
         const options = {
@@ -297,9 +305,9 @@ async function start() {
         };
         server.log('info', {'token': token});
 
-        return require('request-promise')(options).then((response) => {
-          const toto = {isValid, credentials, artifacts};
-          return toto;
+        return request(options).then((response) => {
+          credentials = response.body;
+          return {isValid, credentials, artifacts};
         }).catch((err) => {
           server.log('error', err);
           server.log('error', 'errorstatuscode:' + err.statusCode)
@@ -309,28 +317,8 @@ async function start() {
       }
     });
 
-    server.auth.strategy('admin', 'bearer-access-token', {
-      validate: async (request, token, h) => {
-        const isValid = token === '4321';
-        server.log('debug', token)
-        const credentials = {token};
-
-        return {isValid, credentials};
-      }
-    });
     server.auth.default('singleuser');
 
-    server.route({
-      method: ['POST'],
-      path: '/user/{id}/enable',
-      config: {
-        payload: {
-          parse: true
-        },
-        auth: 'admin'
-      },
-      handler: postEtna
-    });
 
     await server.start();
   }
