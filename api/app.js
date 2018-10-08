@@ -262,6 +262,12 @@ server.route({
 });
 
 server.route({
+  method: ['GET'],
+  path: '/user',
+  handler: getEtna
+});
+
+server.route({
   method: ['POST'],
   path: '/crime/search',
   config: {
