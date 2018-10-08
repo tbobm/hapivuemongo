@@ -94,7 +94,7 @@ const loginHandler = async (r, h) => {
     return response.body;
   }).catch((err) => {
     if (err.statusCode === 404) {
-      return {error: "User not found or incorrect password"};
+      return {error: "User not found or not enabled or incorrect password"};
     }
     server.log('error', err);
     server.log('error', 'errorstatuscode:' + err.statusCode)
@@ -261,10 +261,29 @@ server.route({
   handler: postEtna
 });
 
+
+const listUnvalidatedUserHandler = async (r, h) => {
+  const options = {
+    uri: 'http://localhost:5003/listUnvalidated',
+    json: true,
+    resolveWithFullResponse: true,
+    method: 'GET',
+  };
+
+  return request(options).then((response) => {
+    return response.body;
+  }).catch((err) => {
+    server.log('error', err);
+    server.log('error', 'errorstatuscode:' + err.statusCode)
+    return Boom.internal();
+  })
+
+};
+
 server.route({
   method: ['GET'],
   path: '/user',
-  handler: getEtna
+  handler: listUnvalidatedUserHandler
 });
 
 server.route({
