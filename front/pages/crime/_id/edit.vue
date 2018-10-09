@@ -28,9 +28,6 @@
 
   export default {
     middleware: 'authenticated',
-/*    validate({params}) {
-      return /^\d+$/.test(params.id)
-    },*/
     asyncData({store, params}) {
       return axios.get(`http://localhost:8000/crimes/${params.id}`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {

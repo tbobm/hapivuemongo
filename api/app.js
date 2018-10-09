@@ -142,7 +142,7 @@ const getCrimeDetails = async (request, h) => {
 const getCrimeList = async (r, h) => {
   const db = r.mongo.db;
   try {
-    return await db.collection(Config.get('mongoConfig.collectionName')).find({}).sort({$natural: -1}).limit(10).toArray();
+    return await db.collection(Config.get('mongoConfig.collectionName')).find({}).limit(100).toArray();
   }
   catch (err) {
     throw err;
@@ -220,7 +220,7 @@ server.route({
   handler: getEtna
 });
 
-const registerTempHandler = async (r, h) => {
+const registerHandler = async (r, h) => {
   const options = {
     uri: 'http://localhost:5000/registerUser',
     json: true,
@@ -247,8 +247,30 @@ server.route({
     },
     auth: false
   },
-  handler: registerTempHandler
+  handler: registerHandler
 });
+
+
+const activateUserHandler = async (r, h) => {
+  const options = {
+    uri: 'http://localhost:5004/activate',
+    json: true,
+    resolveWithFullResponse: true,
+    method: 'POST',
+    payload: {
+      id: r.params.id
+    }
+  };
+
+  return request(options).then((response) => {
+    return response.body;
+  }).catch((err) => {
+    server.log('error', err);
+    server.log('error', 'errorstatuscode:' + err.statusCode)
+    return Boom.internal();
+  })
+
+};
 
 server.route({
   method: ['POST'],
@@ -258,7 +280,7 @@ server.route({
       parse: true
     }
   },
-  handler: postEtna
+  handler: activateUserHandler
 });
 
 
