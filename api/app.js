@@ -152,7 +152,7 @@ const getCrimeList = async (r, h) => {
 
 server.route({
   method: 'GET',
-  path: '/crime/{id?}',
+  path: '/crimes/{id?}',
   handler: getCrime
 });
 
@@ -175,7 +175,7 @@ const updateCrime = async (r, h) => {
 
 server.route({
   method: 'POST',
-  path: '/crime/{id}',
+  path: '/crimes/{id}',
   handler: updateCrime
 });
 
@@ -197,13 +197,13 @@ const deleteCrime = async (r, h) => {
 
 server.route({
   method: 'DELETE',
-  path: '/crime/{id}',
+  path: '/crimes/{id}',
   handler: deleteCrime
 });
 
 server.route({
   method: ['POST'],
-  path: '/crime',
+  path: '/crimes',
   config: {
     payload: {
       parse: true
@@ -216,7 +216,7 @@ server.route({
 
 server.route({
   method: 'GET',
-  path: '/user/export',
+  path: '/users/export',
   handler: getEtna
 });
 
@@ -252,7 +252,7 @@ server.route({
 
 server.route({
   method: ['POST'],
-  path: '/user/{id}/enable',
+  path: '/users/{id}/enable',
   config: {
     payload: {
       parse: true
@@ -282,13 +282,13 @@ const listUnvalidatedUserHandler = async (r, h) => {
 
 server.route({
   method: ['GET'],
-  path: '/user',
+  path: '/users',
   handler: listUnvalidatedUserHandler
 });
 
 server.route({
   method: ['POST'],
-  path: '/crime/search',
+  path: '/crimes/search',
   config: {
     payload: {
       parse: true

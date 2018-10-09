@@ -29,7 +29,7 @@
       return /^\d+$/.test(params.id)
     },*/
     asyncData({store, params}) {
-      return axios.get(`http://localhost:8000/crime/${params.id}`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
+      return axios.get(`http://localhost:8000/crimes/${params.id}`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {
           return {details: res.data}
         })

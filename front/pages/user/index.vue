@@ -1,7 +1,25 @@
 <template>
   <div>
-    Users : index
-    {{ details }}
+    <table class="table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Grade</th>
+        <td v-if="$store.state.auth && $store.state.auth.permissions.validate">Enable</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(item, index) in details.users" :key="index">
+        <td>{{ item.id }}</td>
+        <td>{{ item.username }}</td>
+        <td>{{ item.grade }}</td>
+        <td v-if="$store.state.auth && $store.state.auth.permissions.validate" style="cursor: pointer"
+            v-on:click="validate(item)">Enable
+        </td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -10,10 +28,18 @@
   export default {
     middleware: 'authenticated',
     asyncData({store}) {
-      return axios.get(`http://localhost:8000/user`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
+      return axios.get(`http://localhost:8000/users`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {
           return {details: res.data}
         })
+    },
+    methods: {
+      validate(item, event) {
+        axios.post(`http://localhost:8000/users/${item.id}/enable`, null, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
+          .then((res) => {
+            console.log(res.data);
+          })
+      }
     }
   }
 </script>

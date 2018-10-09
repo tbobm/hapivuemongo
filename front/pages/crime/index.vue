@@ -28,18 +28,17 @@
 </template>
 <script>
   import axios from 'axios';
-
   export default {
     middleware: 'authenticated',
     asyncData({store}) {
-      return axios.get(`http://localhost:8000/crime`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
+      return axios.get(`http://localhost:8000/crimes`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {
           return {details: res.data}
         })
     },
     methods: {
       deleteCrime(item, event) {
-        axios.delete(`http://localhost:8000/crime/${item._id}`, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
+        axios.delete(`http://localhost:8000/crimes/${item._id}`, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
           .then((res) => {
             console.log(res.data);
           })
