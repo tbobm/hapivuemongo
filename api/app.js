@@ -285,17 +285,16 @@ server.route({
 
 const activateUserHandler = async (r, h) => {
   const options = {
-    uri: 'http://localhost:5004/activate',
-    json: true,
+    uri: 'http://localhost:5003/validateUser',
     resolveWithFullResponse: true,
-    method: 'POST',
-    payload: {
+    method: 'PUT',
+    json: {
       id: r.params.id
     }
   };
 
   return request(options).then((response) => {
-    return response.body;
+    return {error: false};
   }).catch((err) => {
     server.log('error', err);
     server.log('error', 'errorstatuscode:' + err.statusCode)
