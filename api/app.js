@@ -139,14 +139,46 @@ const getCrimeDetails = async (request, h) => {
 
 };
 
-const getCrimeList = async (r, h) => {
+const oldGetCrimeList = async (r, h) => {
   const db = r.mongo.db;
   try {
-    return await db.collection(Config.get('mongoConfig.collectionName')).find({}).limit(100).toArray();
+    server.log('debug', r.params);
+    server.log('debug', parseInt(r.params.limit));
+    if (!r.params.limit)
+      r.params.limit = 25;
+    if (!r.params.offset)
+      r.params.offset = 0;
+    let toto = await db.collection(Config.get('mongoConfig.collectionName')).find({}, {
+      limit: r.params.limit,
+      skip: r.params.offset
+    }).limit(parseInt(r.params.limit)).toArray();
+    return toto;
   }
   catch (err) {
     throw err;
   }
+
+};
+
+const getCrimeList = async (r, h) => {
+  var obj = {};
+  if (r.params.fieldFiltered && r.params.filterValue)
+    obj[r.params.fieldFiltered] = r.params.filterValue;
+  const options = {
+    uri: 'http://localhost:5004/crimes',
+    json: true,
+    resolveWithFullResponse: true,
+    method: 'POST',
+    payload: obj,
+  };
+
+  return request(options).then((response) => {
+    return response.body;
+  }).catch((err) => {
+    server.log('error', err);
+    server.log('error', 'errorstatuscode:' + err.statusCode)
+    Boom.notFound();
+  })
 
 };
 
