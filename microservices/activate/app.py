@@ -53,5 +53,26 @@ def register_user():
     return jsonify(response), 200
 
 
+@app.route('/validateUser', methods=['PUT'])
+def activate_user():
+    json = request.get_json(force=True)
+    user = Users.query.filter_by(
+        id=json.get('id'),
+    ).first()
+    if user is None:
+        response = {
+            'error': True,
+        }
+        return jsonify(response), 404
+    user.active = True
+    db.session.add(user)
+    db.session.commit()
+    response = {
+        'error': False,
+        'data': user.to_json(),
+    }
+    return jsonify(response), 204
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5003)
