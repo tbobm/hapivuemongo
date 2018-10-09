@@ -62,11 +62,10 @@ services:
     ports:
       - "5003:5003"
     environment:
-
       SQL_URI: "\
         mysql+pymysql://\
-        ms_reader:\
-        Zevflhy0PRB6ZbD8P0ubeBzH81lXRY7D5IrnQH96pjr7jjeJKD5W9LrvV9P0\
+        ms_writer:\
+        Hjpvv1x22ci_-SJWtyZNhrFDkRK0cSNrwczx7fSkME4c2xOTXDmJfwFOpQ5w\
         @maria/hapivue\
         "
   search:
