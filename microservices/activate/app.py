@@ -20,7 +20,7 @@ class Users(db.Model):
     username = db.Column(db.String(255), nullable=False)
     grade = db.relationship('Grades')
 
-    def to_json():
+    def to_json(self):
         obj = {
             'username': self.username,
             'grade': self.grade.name,
