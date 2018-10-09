@@ -36,7 +36,7 @@ def get_user(id):
     return crimes.find_one({"_id": id})
 
 
-@app.route("/crimes", methods=['GET'])
+@app.route("/crimes", methods=['POST'])
 def get_users():
     json = request.get_json(force=True)
     params = [
