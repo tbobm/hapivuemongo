@@ -74,3 +74,14 @@ services:
       - "5004:5004"
     environment:
       MONGO_URI: "mongodb://mongodb/hapivue"
+  delete:
+    build: microservices/delete
+    ports:
+      - "5005:5005"
+    environment:
+      SQL_URI: "\
+        mysql+pymysql://\
+        ms_writer:\
+        Hjpvv1x22ci_-SJWtyZNhrFDkRK0cSNrwczx7fSkME4c2xOTXDmJfwFOpQ5w\
+        @maria/hapivue\
+        "
