@@ -69,3 +69,9 @@ services:
         Zevflhy0PRB6ZbD8P0ubeBzH81lXRY7D5IrnQH96pjr7jjeJKD5W9LrvV9P0\
         @maria/hapivue\
         "
+  search:
+    build: microservices/search
+    ports:
+      - "5004:5004"
+    environment:
+      MONGO_URI: "mongodb://mongodb/hapivue"
