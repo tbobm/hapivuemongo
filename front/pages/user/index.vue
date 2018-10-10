@@ -6,7 +6,7 @@
         <th>ID</th>
         <th>Username</th>
         <th>Grade</th>
-        <td v-if="$store.state.auth && $store.state.auth.permissions.validate">Enable</td>
+        <th v-if="$store.state.auth && $store.state.auth.permissions.validate">Enable</th>
       </tr>
       </thead>
       <tbody>
@@ -14,8 +14,10 @@
         <td>{{ item.id }}</td>
         <td>{{ item.username }}</td>
         <td>{{ item.grade }}</td>
-        <td v-if="$store.state.auth && $store.state.auth.permissions.validate" style="cursor: pointer"
-            v-on:click="validate(item)">Enable
+        <td v-if="$store.state.auth && $store.state.auth.permissions.validate">
+          <div class="col-sm-12 btn btn-outline-primary" v-on:click="validate(item)">
+            Enable
+          </div>
         </td>
       </tr>
       </tbody>
