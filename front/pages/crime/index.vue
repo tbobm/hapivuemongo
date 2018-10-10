@@ -73,15 +73,15 @@
         fieldFiltered: null,
         filterValue: null,
         limit: 25,
-        page: 2,
-        length: 160,
+        page: 1,
+        length: null,
         details: []
       }
     },
     asyncData({store}) {
       return axios.get(`http://localhost:8000/crimes`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {
-          return {details: res.data}
+          return {details: res.data.data, length: res.data.length}
         })
     },
     methods: {
@@ -101,7 +101,8 @@
           }, headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}
         })
           .then((res) => {
-            this.details = res.data
+            this.details = res.data.data;
+            this.length = res.data.length;
           })
       },
       goToPage(page, event) {

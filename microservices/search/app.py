@@ -3,13 +3,14 @@ Search API for hapivuemongo crimes
 """
 import os
 
-from flask import request
+from flask import request, jsonify
 from flask_stupe import paginate, schema_required
 from flask_stupe.json import Stupeflask
 from marshmallow import Schema
 from marshmallow.fields import String, Integer, Boolean
 from pymongo import MongoClient
-
+from bson import Binary, Code
+from bson.json_util import dumps
 
 app = Stupeflask(__name__)
 crimes = MongoClient(os.environ.get('MONGO_URI')).hapivue.crimes
@@ -38,10 +39,10 @@ def get_user(id):
 
 @app.route("/crimes", methods=['POST'])
 def get_users():
-    json = request.get_json(force=True)
+    json_params = request.get_json(force=True)
     params = [
         'compnos',
-        'district',
+        'reptdistrict',
         'domestic',
         'shooting',
         'weapontype',
@@ -50,12 +51,24 @@ def get_users():
     query = dict()
 
     for param in params:
-        tmp = json.get(param)
-
+        tmp = json_params.get(param)
         if tmp is not None:
             query[param] = tmp
-
-    return list(crimes.find(query))
+    offset = int(json_params.get('offset'));
+    limit = int(json_params.get('limit'));
+    crime_request = crimes.find(query);
+    app.logger.info('Query : %r', query )
+    crime_count = crime_request.count();
+    app.logger.info('Count : %d', crime_count)
+    crime_list = list(crime_request.limit(offset+limit))
+    reduced_crime_list = crime_list[offset:(offset+limit)];
+    response = {
+        'error': False,
+        'length': crime_count,
+        'data': reduced_crime_list
+    }
+    app.logger.info('response : %r', response )
+    return jsonify(response)
 
 
 if __name__ == '__main__':

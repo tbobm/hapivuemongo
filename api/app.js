@@ -161,18 +161,27 @@ const oldGetCrimeList = async (r, h) => {
 };
 
 const getCrimeList = async (r, h) => {
+  server.log('debug', r.query);
+  if (!r.query.limit)
+    r.query.limit = 25;
+  if (!r.query.offset)
+    r.query.offset = 0;
   var obj = {};
-  if (r.params.fieldFiltered && r.params.filterValue)
-    obj[r.params.fieldFiltered] = r.params.filterValue;
+  obj["limit"] = r.query.limit;
+  obj["offset"] = r.query.offset;
+  if (r.query.field && r.query.filter)
+    obj[r.query.field] = r.query.filter;
+  server.log('debug', obj);
   const options = {
     uri: 'http://localhost:5004/crimes',
     json: true,
     resolveWithFullResponse: true,
     method: 'POST',
-    payload: obj,
+    body: obj,
   };
 
   return request(options).then((response) => {
+    //server.log('debug', response);
     return response.body;
   }).catch((err) => {
     server.log('error', err);
