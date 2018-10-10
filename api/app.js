@@ -203,6 +203,7 @@ const updateCrime = async (r, h) => {
     return Boom.forbidden("You don't have enough permissions");
   const db = r.mongo.db;
   try {
+    r.payload._id = new r.mongo.ObjectID(r.payload._id)
     const result = await db.collection(Config.get('mongoConfig.collectionName')).save(r.payload);
     if (!result) {
       return Boom.notFound();

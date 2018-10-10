@@ -36,7 +36,7 @@
     },
     methods: {
       edit() {
-        axios.post(`http://localhost:8000/crimes/${this.details.compnos}`, this.details, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
+        axios.post(`http://localhost:8000/crimes/${this.details._id}`, this.details, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
           .then((res) => {
             console.log(res.data);
           })
