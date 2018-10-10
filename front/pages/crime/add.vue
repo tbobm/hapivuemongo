@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form @submit.prevent="add" novalidate>
+    <b-form @submit.prevent="add">
       <table class="table">
         <thead>
         <tr>
@@ -9,9 +9,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(detail, v_key) in form" :key="v_key">
+        <tr v-for="(detail, v_key) in $store.state.crimeField" :key="v_key">
           <td>{{ v_key }}</td>
-          <td><input v-model="form[v_key]" style="width: 100%"/></td>
+          <td><input v-model="form[v_key]" v-bind:type="detail.type" :disabled="!detail.editable" style="width: 100%"/></td>
         </tr>
         <tr>
           <td colspan="2">
