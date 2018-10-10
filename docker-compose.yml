@@ -97,4 +97,4 @@ services:
   export:
     build: microservices/export
     ports:
-      - "8000:8000"
+      - "4000:8000"
