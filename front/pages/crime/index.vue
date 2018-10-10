@@ -7,23 +7,24 @@
     </style>
     <div>{{fieldFiltered}} : {{ filterValue }}</div>
     <div class="col-sm-4 float-right">
-      <input type="text" name="filterValue" v-model="filterValue" @input="goToPage(1)" style="width: 100%;">
+      <input type="text" name="filterValue" v-model="filterValue" @input="updateFilter()" style="width: 100%;">
     </div>
     <table class="table">
       <thead>
       <tr>
         <th>Case number <input type="radio" class="filterChoice" name="fieldFiltered" value="compnos"
-                               v-model="fieldFiltered" @change="goToPage(1)"></th>
-        <th>Year <input type="radio" class="filterChoice" name="fieldFiltered" value="year" v-model="fieldFiltered" @change="goToPage(1)">
+                               v-model="fieldFiltered" @change="updateFilter()"></th>
+        <th>Year <input type="radio" class="filterChoice" name="fieldFiltered" value="year" v-model="fieldFiltered"
+                        @change="updateFilter()">
         </th>
         <th>Weapon type <input type="radio" class="filterChoice" name="fieldFiltered" value="weapontype"
-                               v-model="fieldFiltered" @change="goToPage(1)"></th>
+                               v-model="fieldFiltered" @change="updateFilter()"></th>
         <th>District <input type="radio" class="filterChoice" name="fieldFiltered" value="reptdistrict"
-                            v-model="fieldFiltered" @change="goToPage(1)"></th>
+                            v-model="fieldFiltered" @change="updateFilter()"></th>
         <th>Shooting <input type="radio" class="filterChoice" name="fieldFiltered" value="shooting"
-                            v-model="fieldFiltered" @change="goToPage(1)"></th>
+                            v-model="fieldFiltered" @change="updateFilter()"></th>
         <th>Domestic <input type="radio" class="filterChoice" name="fieldFiltered" value="domestic"
-                            v-model="fieldFiltered" @change="goToPage(1)"></th>
+                            v-model="fieldFiltered" @change="updateFilter()"></th>
         <td v-if="$store.state.auth && $store.state.auth.permissions.delete">Delete this crime</td>
       </tr>
       </thead>
@@ -38,7 +39,7 @@
         <td>{{ item.shooting }}</td>
         <td>{{ item.domestic }}</td>
         <td v-if="$store.state.auth && $store.state.auth.permissions.delete" style="cursor: pointer"
-            v-on:click="deleteCrime(item)">Delete this
+            v-on:click="deleteCrime(item, $event)">Delete this
         </td>
       </tr>
       </tbody>
@@ -88,7 +89,7 @@
       deleteCrime(item, event) {
         axios.delete(`http://localhost:8000/crimes/${item._id}`, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
           .then((res) => {
-            console.log(res.data);
+            this.reloadData(null);
           })
       },
       reloadData(event) {
@@ -105,11 +106,14 @@
             this.length = res.data.length;
           })
       },
-      goToPage(page, event) {
+      updateFilter(event) {
         if (this.fieldFiltered) {
-          this.page = page;
-          this.reloadData(event);
+          this.goToPage(1);
         }
+      },
+      goToPage(page, event) {
+        this.page = page;
+        this.reloadData(event);
       }
     }
   }
