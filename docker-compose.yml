@@ -50,7 +50,6 @@ services:
     ports:
       - "5002:5002"
     environment:
-
       SQL_URI: "\
         mysql+pymysql://\
         ms_reader:\
@@ -85,3 +84,7 @@ services:
         Hjpvv1x22ci_-SJWtyZNhrFDkRK0cSNrwczx7fSkME4c2xOTXDmJfwFOpQ5w\
         @maria/hapivue\
         "
+  export:
+    build: microservices/export
+    ports:
+      - "8000:8000"
