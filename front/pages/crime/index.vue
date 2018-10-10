@@ -5,9 +5,16 @@
         float: right;
       }
     </style>
-    <div>{{fieldFiltered}} : {{ filterValue }}</div>
-    <div class="col-sm-4 float-right">
-      <input type="text" name="filterValue" v-model="filterValue" @input="updateFilter()" style="width: 100%;">
+
+    <div class="row">
+      <div class="col-sm-8">
+        <nuxt-link class="col-sm-12 btn btn-outline-primary" :to="{ name: 'crime-add', params: { id: details._id }}"
+                   v-if="$store.state.auth && $store.state.auth.permissions.edit">Add
+        </nuxt-link>
+      </div>
+      <div class="col-sm-4">
+        <input type="text" name="filterValue" v-model="filterValue" @input="updateFilter()" style="width: 100%;">
+      </div>
     </div>
     <table class="table">
       <thead>
@@ -25,7 +32,9 @@
                             v-model="fieldFiltered" @change="updateFilter()"></th>
         <th>Domestic <input type="radio" class="filterChoice" name="fieldFiltered" value="domestic"
                             v-model="fieldFiltered" @change="updateFilter()"></th>
-        <td v-if="$store.state.auth && $store.state.auth.permissions.delete">Delete this crime</td>
+        <td v-if="$store.state.auth && $store.state.auth.permissions.delete">
+          Actions
+        </td>
       </tr>
       </thead>
       <tbody>
@@ -38,8 +47,10 @@
         <td>{{ item.reptdistrict }}</td>
         <td>{{ item.shooting }}</td>
         <td>{{ item.domestic }}</td>
-        <td v-if="$store.state.auth && $store.state.auth.permissions.delete" style="cursor: pointer"
-            v-on:click="deleteCrime(item, $event)">Delete this
+        <td v-if="$store.state.auth && $store.state.auth.permissions.delete" style="cursor: pointer">
+          <div class="col-sm-12 btn btn-outline-primary" v-on:click="deleteCrime(item, $event)">
+            Delete this
+          </div>
         </td>
       </tr>
       </tbody>
