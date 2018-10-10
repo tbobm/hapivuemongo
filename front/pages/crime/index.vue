@@ -7,23 +7,23 @@
     </style>
     <div>{{fieldFiltered}} : {{ filterValue }}</div>
     <div class="col-sm-4 float-right">
-      <input type="text" name="filterValue" v-model="filterValue" @input="updateFilter" style="width: 100%;">
+      <input type="text" name="filterValue" v-model="filterValue" @input="goToPage(1)" style="width: 100%;">
     </div>
     <table class="table">
       <thead>
       <tr>
         <th>Case number <input type="radio" class="filterChoice" name="fieldFiltered" value="compnos"
-                               v-model="fieldFiltered"></th>
-        <th>Year <input type="radio" class="filterChoice" name="fieldFiltered" value="year" v-model="fieldFiltered">
+                               v-model="fieldFiltered" @change="goToPage(1)"></th>
+        <th>Year <input type="radio" class="filterChoice" name="fieldFiltered" value="year" v-model="fieldFiltered" @change="goToPage(1)">
         </th>
         <th>Weapon type <input type="radio" class="filterChoice" name="fieldFiltered" value="weapontype"
-                               v-model="fieldFiltered"></th>
+                               v-model="fieldFiltered" @change="goToPage(1)"></th>
         <th>District <input type="radio" class="filterChoice" name="fieldFiltered" value="reptdistrict"
-                            v-model="fieldFiltered"></th>
+                            v-model="fieldFiltered" @change="goToPage(1)"></th>
         <th>Shooting <input type="radio" class="filterChoice" name="fieldFiltered" value="shooting"
-                            v-model="fieldFiltered"></th>
+                            v-model="fieldFiltered" @change="goToPage(1)"></th>
         <th>Domestic <input type="radio" class="filterChoice" name="fieldFiltered" value="domestic"
-                            v-model="fieldFiltered"></th>
+                            v-model="fieldFiltered" @change="goToPage(1)"></th>
         <td v-if="$store.state.auth && $store.state.auth.permissions.delete">Delete this crime</td>
       </tr>
       </thead>
@@ -91,7 +91,7 @@
             console.log(res.data);
           })
       },
-      updateFilter(event) {
+      reloadData(event) {
         axios.get(`http://localhost:8000/crimes`, {
           params: {
             'field': this.fieldFiltered,
@@ -106,8 +106,10 @@
           })
       },
       goToPage(page, event) {
-        this.page = page;
-        this.updateFilter(event);
+        if (this.fieldFiltered) {
+          this.page = page;
+          this.reloadData(event);
+        }
       }
     }
   }
