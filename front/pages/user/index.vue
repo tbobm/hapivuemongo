@@ -1,5 +1,8 @@
 <template>
   <div>
+
+    <div class="col-sm-12 btn btn-outline-primary" v-on:click="exportUsers()">Export
+    </div>
     <table class="table">
       <thead>
       <tr>
@@ -27,6 +30,7 @@
 
 <script>
   import axios from 'axios';
+
   export default {
     middleware: 'authenticated',
     asyncData({store}) {
@@ -41,7 +45,21 @@
           .then((res) => {
             console.log(res.data);
           })
-      }
+      },
+      exportUsers(event) {
+        axios.get(`http://localhost:8000/users.csv`, {
+          headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`},
+          responseType: 'blob'
+        })
+          .then((res) => {
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'users.csv');
+            document.body.appendChild(link);
+            link.click();
+          })
+      },
     }
   }
 </script>

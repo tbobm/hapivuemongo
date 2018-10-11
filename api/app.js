@@ -256,10 +256,27 @@ server.route({
 
 /* MICROSERVICES */
 
+const userExportHandler = async (r, reply) => {
+  const options = {
+    uri: 'http://localhost:4000/exportToCsv',
+    json: true,
+    resolveWithFullResponse: true,
+    method: 'GET',
+  };
+
+  return request(options).then((response) => {
+    return response.body;
+  }).catch((err) => {
+    server.log('error', err);
+    server.log('error', 'errorstatuscode:' + err.statusCode)
+    return Boom.internal();
+  })
+};
+
 server.route({
   method: 'GET',
-  path: '/users/export',
-  handler: getEtna
+  path: '/users.csv',
+  handler: userExportHandler
 });
 
 const registerHandler = async (r, h) => {
@@ -324,7 +341,6 @@ server.route({
   handler: activateUserHandler
 });
 
-
 const listUnvalidatedUserHandler = async (r, h) => {
   const options = {
     uri: 'http://localhost:5003/listUnvalidated',
@@ -340,7 +356,6 @@ const listUnvalidatedUserHandler = async (r, h) => {
     server.log('error', 'errorstatuscode:' + err.statusCode)
     return Boom.internal();
   })
-
 };
 
 server.route({
@@ -348,18 +363,6 @@ server.route({
   path: '/users',
   handler: listUnvalidatedUserHandler
 });
-
-server.route({
-  method: ['POST'],
-  path: '/crimes/search',
-  config: {
-    payload: {
-      parse: true
-    }
-  },
-  handler: postEtna
-});
-
 
 async function start() {
   try {
