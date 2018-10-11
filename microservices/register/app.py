@@ -40,7 +40,7 @@ def register_user():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    hashed = hashlib.sha256(password, 'utf-8').hexdiget()
+    hashed = hashlib.sha256(bytes(password, 'utf-8')).hexdigest()
     grade = data.get('grade')
     grade_name = Grades.query.filter_by(name=grade).first()
     new_user = Users(
