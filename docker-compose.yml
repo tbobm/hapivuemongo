@@ -23,6 +23,14 @@ services:
       - ./databases/maria/db_users.sql:/docker-entrypoint-initdb.d/01-users.sql
       - ./databases/maria/users.sql:/docker-entrypoint-initdb.d/02-tables.sql
       - ./databases/maria/my.cnf:/etc/mysql/conf.d/custom.cnf
+
+  api:
+    build: api
+    ports:
+      - "8000"
+    environment:
+      MONGO_URI: "mongodb://mongodb/hapivue"
+
   register:
     build: microservices/register
     links:
