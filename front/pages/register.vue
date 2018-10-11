@@ -5,12 +5,15 @@
 
         <b-alert variant="danger" :show="registerStatus === false" dismissible>Sorry, invalid email or password.</b-alert>
         <b-alert variant="success" :show="registerStatus === true" dismissible>Registration successful ! You will be redirected to login page !</b-alert>
-        <b-form @submit.prevent="register" novalidate>
+        <b-form @submit.prevent="register">
+          <b-form-group label="Grade">
+            <b-form-select type="text" name="grade" :options="options" v-model="form.grade" required></b-form-select>
+          </b-form-group>
           <b-form-group label="User name">
-            <b-form-input type="text" name="username" v-model="form.username"></b-form-input>
+            <b-form-input type="text" name="username" v-model="form.username" required></b-form-input>
           </b-form-group>
           <b-form-group label="Password">
-            <b-form-input type="password" name="password" v-model="form.password"></b-form-input>
+            <b-form-input type="password" name="password" v-model="form.password" required></b-form-input>
           </b-form-group>
           <b-button variant="primary" size="lg" type="submit">Register</b-button>
         </b-form>
@@ -31,8 +34,14 @@
         form: {
           username: '',
           password: '',
-          grade: 1
+          grade: null
         },
+        options: [
+          { value: null, text: 'Veuillez choisir votre grade' },
+          { value: 1, text: 'Agent' },
+          { value: 2, text: 'Détective' },
+          { value: 3, text: 'Chef de la police' }
+        ],
         registerStatus: null
       }
     },
