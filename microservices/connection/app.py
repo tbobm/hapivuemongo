@@ -3,6 +3,7 @@ Tiny microservice managing connection based on Flask.
 """
 import os
 
+import hashlib
 from secrets import token_urlsafe
 
 from flask import Flask, jsonify, request
@@ -47,9 +48,10 @@ def register_user():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
+    hashed = hashlib.sha256(password, 'utf-8').hexdigest()
     user = Users.query.filter_by(
         username=username,
-        password=password,
+        password=hashed,
         active=True,
     ).first()
     if not user:
