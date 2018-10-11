@@ -6,7 +6,7 @@ const Boom = require('boom');
 const request = require('request-promise');
 
 const dbOpts = {
-  url: "mongodb://" + Config.get("mongoConfig.host") + ":" + Config.get("mongoConfig.port") + "/" + Config.get("mongoConfig.dbName"),
+  url: process.env.MONGO_URI || "mongodb://localhost/hapivue",
   settings: {
     poolSize: 10
   },
