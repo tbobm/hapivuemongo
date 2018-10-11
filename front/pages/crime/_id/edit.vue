@@ -11,7 +11,7 @@
         <tbody>
         <tr v-for="(detail, v_key) in $store.state.crimeField" :key="v_key">
           <td>{{ v_key }}</td>
-          <td><input v-model="details[v_key]" v-bind:type="detail.type" style="width: 100%"/></td>
+          <td><input v-model="details[v_key]" v-bind:type="detail.type" style="width: 100%" step="any"/></td>
         </tr>
         <tr>
           <td colspan="2">
@@ -38,7 +38,6 @@
       edit() {
         axios.post(`http://localhost:8000/crimes/${this.details._id}`, this.details, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
           .then((res) => {
-            console.log(res.data);
           })
       }
     }

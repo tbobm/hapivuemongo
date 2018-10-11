@@ -139,7 +139,7 @@ const getCrimeDetails = async (request, h) => {
 
 };
 
-const oldGetCrimeList = async (r, h) => {
+const getCrimeList = async (r, h) => {
   const db = r.mongo.db;
   try {
     server.log('debug', r.params);
@@ -148,11 +148,11 @@ const oldGetCrimeList = async (r, h) => {
       r.params.limit = 25;
     if (!r.params.offset)
       r.params.offset = 0;
-    let toto = await db.collection(Config.get('mongoConfig.collectionName')).find({}, {
+    let listCrime = await db.collection(Config.get('mongoConfig.collectionName')).find({}, {
       limit: r.params.limit,
       skip: r.params.offset
     }).limit(parseInt(r.params.limit)).toArray();
-    return toto;
+    return listCrime;
   }
   catch (err) {
     throw err;
@@ -160,17 +160,23 @@ const oldGetCrimeList = async (r, h) => {
 
 };
 
-const getCrimeList = async (r, h) => {
-  server.log('debug', r.query);
-  if (!r.query.limit)
-    r.query.limit = 25;
-  if (!r.query.offset)
-    r.query.offset = 0;
-  var obj = {};
-  obj["limit"] = r.query.limit;
-  obj["offset"] = r.query.offset;
-  if (r.query.field && r.query.filter)
-    obj[r.query.field] = r.query.filter;
+server.route({
+  method: 'GET',
+  path: '/crimes/{id}',
+  handler: getCrime
+});
+
+const searchCrime = async (r, h) => {
+  server.log('debug', r.payload);
+  if (!r.payload.limit)
+    r.payload.limit = 25;
+  if (!r.payload.offset)
+    r.payload.offset = 0;
+  let obj = {};
+  obj["limit"] = r.payload.limit;
+  obj["offset"] = r.payload.offset;
+  if (r.payload.field && r.payload.filter)
+    obj[r.payload.field] = r.payload.filter;
   server.log('debug', obj);
   const options = {
     uri: 'http://localhost:5004/crimes',
@@ -192,9 +198,9 @@ const getCrimeList = async (r, h) => {
 };
 
 server.route({
-  method: 'GET',
-  path: '/crimes/{id?}',
-  handler: getCrime
+  method: 'POST',
+  path: '/crimes/search',
+  handler: searchCrime
 });
 
 
@@ -409,7 +415,6 @@ async function start() {
     await server.start();
   }
   catch (err) {
-    console.log(err);
     process.exit(1);
   }
   ;

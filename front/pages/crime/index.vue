@@ -12,26 +12,27 @@
                    v-if="$store.state.auth && $store.state.auth.permissions.edit">Add
         </nuxt-link>
       </div>
-      <div class="col-sm-4">
-        <input type="text" name="filterValue" v-model="filterValue" @input="updateFilter()" style="width: 100%;">
+      <div class="col-sm-4" v-if="fieldFiltered">
+        {{fieldFilteredValue}}
+        <input v-bind:type="$store.state.crimeField[fieldFiltered].type" v-model="fieldFilteredValue" @change="updateFilter()" style="width: 100%;">
       </div>
     </div>
     <table class="table">
       <thead>
       <tr>
         <th>Case number <input type="radio" class="filterChoice" name="fieldFiltered" value="compnos"
-                               v-model="fieldFiltered" @change="updateFilter()"></th>
+                               v-model="fieldFiltered" @change="changeFilter()"></th>
         <th>Year <input type="radio" class="filterChoice" name="fieldFiltered" value="year" v-model="fieldFiltered"
-                        @change="updateFilter()">
+                        @change="changeFilter()">
         </th>
         <th>Weapon type <input type="radio" class="filterChoice" name="fieldFiltered" value="weapontype"
-                               v-model="fieldFiltered" @change="updateFilter()"></th>
+                               v-model="fieldFiltered" @change="changeFilter()"></th>
         <th>District <input type="radio" class="filterChoice" name="fieldFiltered" value="reptdistrict"
-                            v-model="fieldFiltered" @change="updateFilter()"></th>
+                            v-model="fieldFiltered" @change="changeFilter()"></th>
         <th>Shooting <input type="radio" class="filterChoice" name="fieldFiltered" value="shooting"
-                            v-model="fieldFiltered" @change="updateFilter()"></th>
+                            v-model="fieldFiltered" @change="changeFilter()"></th>
         <th>Domestic <input type="radio" class="filterChoice" name="fieldFiltered" value="domestic"
-                            v-model="fieldFiltered" @change="updateFilter()"></th>
+                            v-model="fieldFiltered" @change="changeFilter()"></th>
         <td v-if="$store.state.auth && $store.state.auth.permissions.delete">
           Actions
         </td>
@@ -83,7 +84,7 @@
     data() {
       return {
         fieldFiltered: null,
-        filterValue: null,
+        fieldFilteredValue: null,
         limit: 25,
         page: 1,
         length: null,
@@ -91,7 +92,7 @@
       }
     },
     asyncData({store}) {
-      return axios.get(`http://localhost:8000/crimes`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
+      return axios.post(`http://localhost:8000/crimes/search`, {}, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {
           return {details: res.data.data, length: res.data.length}
         })
@@ -104,13 +105,14 @@
           })
       },
       reloadData(event) {
-        axios.get(`http://localhost:8000/crimes`, {
-          params: {
-            'field': this.fieldFiltered,
-            'filter': this.filterValue,
-            'limit': this.limit,
-            'offset': (this.page - 1) * this.limit
-          }, headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}
+        const params = {
+          'field': this.fieldFiltered,
+          'filter': this.fieldFilteredValue,
+          'limit': this.limit,
+          'offset': (this.page - 1) * this.limit
+        }
+        axios.post(`http://localhost:8000/crimes/search`, params, {
+          headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}
         })
           .then((res) => {
             this.details = res.data.data;
@@ -121,6 +123,10 @@
         if (this.fieldFiltered) {
           this.goToPage(1);
         }
+      },
+      changeFilter(event) {
+        this.fieldFilteredValue = null;
+        this.updateFilter(event);
       },
       goToPage(page, event) {
         this.page = page;

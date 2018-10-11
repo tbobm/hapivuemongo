@@ -20,7 +20,7 @@ const createStore = () => {
         },
         "location": {
           "required": true,
-          "type": "0",
+          "type": "text",
           "editable": true
         },
         "incident_type_description": {
@@ -74,7 +74,7 @@ const createStore = () => {
           "type": "number"
         },
         "fromdate": {
-          "type": "datetime-local",
+          "type": "text",
           "required": true,
           "editable": true
         },
