@@ -3,6 +3,8 @@ Tiny microservice registering users based on flask.
 """
 import os
 
+import hashlib
+
 from flask import Flask, jsonify, request
 from pymysql.err import IntegrityError
 from flask_sqlalchemy import SQLAlchemy
@@ -38,13 +40,14 @@ def register_user():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
+    hashed = hashlib.sha256(password, 'utf-8').hexdiget()
     grade = data.get('grade')
     grade_name = Grades.query.filter_by(name=grade).first()
     new_user = Users(
         active=False,
         grade_id=grade,
         username=username,
-        password=password,
+        password=hashed,
     )
     db.session.add(new_user)
     try:
