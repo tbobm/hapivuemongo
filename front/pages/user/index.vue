@@ -18,8 +18,9 @@
         <td>{{ item.username }}</td>
         <td>{{ item.grade }}</td>
         <td v-if="$store.state.auth && $store.state.auth.permissions.validate">
-          <div class="col-sm-12 btn btn-outline-primary" v-on:click="validate(item)">
-            Enable
+          <div class="col-sm-12 btn btn-outline-primary" v-on:click="validate(item, $event)"
+               v-if="item.username != $store.state.auth.user.username">
+            {{ item.active ? 'Disable' : 'Enable'}}
           </div>
         </td>
       </tr>
@@ -43,7 +44,7 @@
       validate(item, event) {
         axios.post(`http://localhost:8000/users/${item.id}/enable`, null, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
           .then((res) => {
-            console.log(res.data);
+            event.target.innerText = res.data.active ? "Disable" : "Enable";
           })
       },
       exportUsers(event) {

@@ -24,6 +24,7 @@ class Users(db.Model):
         obj = {
             'username': self.username,
             'grade': self.grade.name,
+            'active': self.active,
             'id': self.id,
         }
         return obj
@@ -40,11 +41,9 @@ def index():
     return jsonify({'ok': True})
 
 
-@app.route('/listUnvalidated', methods=['GET'])
+@app.route('/list', methods=['GET'])
 def register_user():
-    users = Users.query.filter_by(
-        active=False,
-    ).all()
+    users = Users.query.all()
     response = {
         'error': False,
         'total': len(users),
@@ -64,14 +63,14 @@ def activate_user():
             'error': True,
         }
         return jsonify(response), 404
-    user.active = True
+    user.active = not user.active
     db.session.add(user)
     db.session.commit()
     response = {
         'error': False,
         'data': user.to_json(),
     }
-    return jsonify(response), 204
+    return jsonify(response), 200
 
 
 if __name__ == '__main__':

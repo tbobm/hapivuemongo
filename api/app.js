@@ -321,7 +321,7 @@ const activateUserHandler = async (r, h) => {
   };
 
   return request(options).then((response) => {
-    return {error: false};
+    return response.body;
   }).catch((err) => {
     server.log('error', err);
     server.log('error', 'errorstatuscode:' + err.statusCode)
@@ -341,9 +341,9 @@ server.route({
   handler: activateUserHandler
 });
 
-const listUnvalidatedUserHandler = async (r, h) => {
+const listUserHandler = async (r, h) => {
   const options = {
-    uri: 'http://localhost:5003/listUnvalidated',
+    uri: 'http://localhost:5003/list',
     json: true,
     resolveWithFullResponse: true,
     method: 'GET',
@@ -361,7 +361,7 @@ const listUnvalidatedUserHandler = async (r, h) => {
 server.route({
   method: ['GET'],
   path: '/users',
-  handler: listUnvalidatedUserHandler
+  handler: listUserHandler
 });
 
 async function start() {
