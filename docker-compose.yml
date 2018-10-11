@@ -30,6 +30,10 @@ services:
       - "8000:8000"
     environment:
       MONGO_URI: "mongodb://mongodb/hapivue"
+  front:
+    build: front
+    ports:
+      - "3000:3000"
 
   register:
     build: microservices/register
