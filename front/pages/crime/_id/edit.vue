@@ -29,14 +29,14 @@
   export default {
     middleware: 'authenticated',
     asyncData({store, params}) {
-      return axios.get(`http://localhost:8000/crimes/${params.id}`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
+      return axios.get(`http://api:8000/crimes/${params.id}`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {
           return {details: res.data}
         })
     },
     methods: {
       edit() {
-        axios.post(`http://localhost:8000/crimes/${this.details._id}`, this.details, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
+        axios.post(`http://api:8000/crimes/${this.details._id}`, this.details, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
           .then((res) => {
           })
       }

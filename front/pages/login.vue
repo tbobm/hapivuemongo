@@ -35,7 +35,7 @@
     },
     methods: {
       postLogin() {
-        axios.post(`http://localhost:8000/login`, this.form)
+        axios.post(`http://api:8000/login`, this.form)
           .then((res) => {
             if (!res.data || res.data.error){
               this.loginFailed = true;

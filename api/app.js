@@ -50,7 +50,7 @@ const postEtna = (request, h) => {
 
 const checkToken = async (r, h) => {
   const options = {
-    uri: 'http://localhost:5002/token',
+    uri: 'http://token:5000/token',
     json: true,
     resolveWithFullResponse: true,
     method: 'POST',
@@ -83,7 +83,7 @@ server.route({
 
 const loginHandler = async (r, h) => {
   const options = {
-    uri: 'http://localhost:5001/connectUser',
+    uri: 'http://connection:5000/connectUser',
     json: true,
     resolveWithFullResponse: true,
     method: 'POST',
@@ -179,7 +179,7 @@ const searchCrime = async (r, h) => {
     obj[r.payload.field] = r.payload.filter;
   server.log('debug', obj);
   const options = {
-    uri: 'http://localhost:5004/crimes',
+    uri: 'http://search:5000/crimes',
     json: true,
     resolveWithFullResponse: true,
     method: 'POST',
@@ -264,7 +264,7 @@ server.route({
 
 const userExportHandler = async (r, reply) => {
   const options = {
-    uri: 'http://localhost:4000/exportToCsv',
+    uri: 'http://export:4000/exportToCsv',
     json: true,
     resolveWithFullResponse: true,
     method: 'GET',
@@ -287,7 +287,7 @@ server.route({
 
 const registerHandler = async (r, h) => {
   const options = {
-    uri: 'http://localhost:5000/registerUser',
+    uri: 'http://register:5000/registerUser',
     json: true,
     resolveWithFullResponse: true,
     method: 'POST',
@@ -318,7 +318,7 @@ server.route({
 
 const activateUserHandler = async (r, h) => {
   const options = {
-    uri: 'http://localhost:5003/validateUser',
+    uri: 'http://activate:5000/validateUser',
     resolveWithFullResponse: true,
     method: 'PUT',
     json: {
@@ -349,7 +349,7 @@ server.route({
 
 const listUserHandler = async (r, h) => {
   const options = {
-    uri: 'http://localhost:5003/list',
+    uri: 'http://activate:5000/list',
     json: true,
     resolveWithFullResponse: true,
     method: 'GET',
@@ -390,7 +390,7 @@ async function start() {
         const artifacts = {test: 'info'};
 
         const options = {
-          uri: 'http://localhost:5002/token',
+          uri: 'http://token:5000/token',
           json: true,
           resolveWithFullResponse: true,
           method: 'POST',

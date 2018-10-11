@@ -36,7 +36,7 @@ services:
     links:
       - maria
     ports:
-      - "5000:5000"
+      - "5000"
     environment:
       SQL_URI: "\
         mysql+pymysql://\
@@ -47,7 +47,7 @@ services:
   connection:
     build: microservices/connection
     ports:
-      - "5001:5001"
+      - "5000"
     environment:
       SQL_URI: "\
         mysql+pymysql://\
@@ -58,7 +58,7 @@ services:
   token:
     build: microservices/token
     ports:
-      - "5002:5002"
+      - "5000"
     environment:
       SQL_URI: "\
         mysql+pymysql://\
@@ -69,7 +69,7 @@ services:
   activate:
     build: microservices/activate
     ports:
-      - "5003:5003"
+      - "5000"
     environment:
       SQL_URI: "\
         mysql+pymysql://\
@@ -80,13 +80,13 @@ services:
   search:
     build: microservices/search
     ports:
-      - "5004:5004"
+      - "5000"
     environment:
       MONGO_URI: "mongodb://mongodb/hapivue"
   delete:
     build: microservices/delete
     ports:
-      - "5005:5005"
+      - "5000"
     environment:
       SQL_URI: "\
         mysql+pymysql://\
@@ -97,4 +97,4 @@ services:
   export:
     build: microservices/export
     ports:
-      - "4000:8000"
+      - "4000"

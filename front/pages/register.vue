@@ -47,7 +47,7 @@
     },
     methods: {
       register() {
-        axios.post(`http://localhost:8000/register`, this.form)
+        axios.post(`http://api:8000/register`, this.form)
           .then((res) => {
             if (res.status !== 200) {
               this.registerStatus = false;

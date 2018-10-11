@@ -7,7 +7,7 @@ export default function ({ store, redirect }) {
     return redirect('/login')
   }
 
-  axios.post(`http://localhost:8000/token`, {token: store.state.auth.token})
+  axios.post(`http://api:8000/token`, {token: store.state.auth.token})
     .then((res) => {
       if (!res.data || res.data.error){
         store.commit('update', null);

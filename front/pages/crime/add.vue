@@ -59,7 +59,7 @@
     },
     methods: {
       add() {
-        axios.post(`http://localhost:8000/crimes`, this.form, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
+        axios.post(`http://api:8000/crimes`, this.form, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
           .then((res) => {
           })
       }

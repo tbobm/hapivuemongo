@@ -4,7 +4,7 @@
     "port": 8000
   },
   "mongoConfig": {
-    "host": "localhost",
+    "host": "mongodb",
     "port": 27017,
     "dbName": "hapivue",
     "collectionName": "crimes"

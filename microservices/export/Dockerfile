@@ -17,6 +17,6 @@ COPY app /var/www/app
 WORKDIR /var/www/app/
 
 RUN composer require "usmanhalalit/laracsv:1.*@dev" && composer install
-EXPOSE 8000
+EXPOSE 4000
 
-CMD php -S 0.0.0.0:8000 -t public
+CMD php -S 0.0.0.0:4000 -t public
