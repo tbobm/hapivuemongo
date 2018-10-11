@@ -35,20 +35,20 @@
   export default {
     middleware: 'authenticated',
     asyncData({store}) {
-      return axios.get(`http://api:8000/users`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
+      return axios.get(`http://localhost:8000/users`, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {
           return {details: res.data}
         })
     },
     methods: {
       validate(item, event) {
-        axios.post(`http://api:8000/users/${item.id}/enable`, null, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
+        axios.post(`http://localhost:8000/users/${item.id}/enable`, null, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
           .then((res) => {
             event.target.innerText = res.data.active ? "Disable" : "Enable";
           })
       },
       exportUsers(event) {
-        axios.get(`http://api:8000/users.csv`, {
+        axios.get(`http://localhost:8000/users.csv`, {
           headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`},
           responseType: 'blob'
         })

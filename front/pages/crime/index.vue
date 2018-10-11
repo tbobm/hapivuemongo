@@ -92,14 +92,14 @@
       }
     },
     asyncData({store}) {
-      return axios.post(`http://api:8000/crimes/search`, {}, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
+      return axios.post(`http://localhost:8000/crimes/search`, {}, {headers: {"Authorization": `Bearer ${store.state.auth.token}`}})
         .then((res) => {
           return {details: res.data.data, length: res.data.length}
         })
     },
     methods: {
       deleteCrime(item, event) {
-        axios.delete(`http://api:8000/crimes/${item._id}`, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
+        axios.delete(`http://localhost:8000/crimes/${item._id}`, {headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}})
           .then((res) => {
             this.reloadData(null);
           })
@@ -111,7 +111,7 @@
           'limit': this.limit,
           'offset': (this.page - 1) * this.limit
         }
-        axios.post(`http://api:8000/crimes/search`, params, {
+        axios.post(`http://localhost:8000/crimes/search`, params, {
           headers: {"Authorization": `Bearer ${this.$store.state.auth.token}`}
         })
           .then((res) => {
