@@ -31,7 +31,7 @@ FORMATTER = {
     'shooting': literal_eval,
     'domestic': literal_eval,
     'shift': ignore,
-    'year': literal_eval,
+    'year': ignore,
     'month': literal_eval,
     'day_week': ignore,
     'ucrpart': ignore,
@@ -39,7 +39,7 @@ FORMATTER = {
     'y': literal_eval,
     'streetname': ignore,
     'xstreetname': ignore,
-    'location': literal_eval,
+    'location': ignore,
 }
 
 FILE = os.environ.get('CSV_FILE', 'data.csv')
