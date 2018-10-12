@@ -49,7 +49,7 @@ def register_user():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    hashed = hashlib.sha256(password, 'utf-8').hexdigest()
+    hashed = hashlib.sha256(bytes(password, 'utf-8')).hexdigest()
     user = Users.query.filter_by(
         username=username,
         password=hashed,
