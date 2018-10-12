@@ -13,7 +13,6 @@
         </nuxt-link>
       </div>
       <div class="col-sm-4" v-if="fieldFiltered">
-        {{fieldFilteredValue}}
         <input v-bind:type="$store.state.crimeField[fieldFiltered].type" v-model="fieldFilteredValue" @change="updateFilter()" style="width: 100%;">
       </div>
     </div>

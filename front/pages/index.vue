@@ -1,7 +1,7 @@
 <template>
   <section class="container-fluid">
     <div class="row">
-      Index : boston
+      <h1>Bienvenue sur le gestionnaire des crimes de la police de Boston</h1>
     </div>
   </section>
 </template>
